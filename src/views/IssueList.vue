@@ -18,25 +18,28 @@
         </el-row>
     </div>
 </template>
+  
 <script>
     import axios from 'axios';
+
     const client = axios.create({ 
-        baseURL: ${process.env.VUE_APP_GITHUB_ENDPOINT}, 
+        baseURL: `${process.env.VUE_APP_GITHUB_ENDPOINT}`, 
         headers: {
             'Accept': 'application/vnd.github.v3+json',
             'Content-Type':'application/json',
             // Modificación de las variables de entorno
-            'Authorization': token ${process.env.VUE_APP_GITHUB_TOKEN}
-     }
+            'Authorization': `token ${process.env.VUE_APP_GITHUB_TOKEN}`
+        },
     })
+
     export default {
         name: 'IssueList',
         // Añade lo siguiente.
     data() {
         return {
         issues: []
-    }
-    }
+        }
+    },
     // Añade lo siguiente.
     methods: {
         getIssues() {
@@ -45,21 +48,21 @@
                 .then((res) => {
                 this.issues = res.data;
             })
-        }
+        }, 
         closeIssue(index){
             const target = this.issues[index] // --3
-            client.patch(/issues/${target.number}, // --4
+            client.patch(`/issues/${target.number}`, // --4
                 {
                     state: 'closed' // --5
-                }
+                },
                 )
             .then(() => {
                 this.issues.splice(index, 1) // --6
             })
-        }
+        },
         created() {
             this.getIssues();
         }
- }
+    }
 }
 </script>
